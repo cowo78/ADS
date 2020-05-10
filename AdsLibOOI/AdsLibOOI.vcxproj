@@ -11,9 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{F94F5A05-3A40-4F66-AEBD-68A4A55579DB}</ProjectGuid>
-    <RootNamespace>AdsLib</RootNamespace>
+    <ProjectGuid>{4377C26C-9B6E-41A0-B2AE-53456DB9A707}</ProjectGuid>
+    <RootNamespace>AdsLibOOI</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <ProjectName>AdsLibOOI</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -32,6 +33,8 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -47,17 +50,8 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <DisableSpecificWarnings>4127;4512</DisableSpecificWarnings>
-      <MinimalRebuild>false</MinimalRebuild>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)AdsLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
-    <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-    <Lib>
-      <AdditionalDependencies>WS2_32.lib</AdditionalDependencies>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -66,43 +60,22 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <DisableSpecificWarnings>
-      </DisableSpecificWarnings>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)AdsLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AmsConnection.h" />
-    <ClInclude Include="AdsDef.h" />
-    <ClInclude Include="AdsLib.h" />
-    <ClInclude Include="AdsNotification.h" />
-    <ClInclude Include="AmsHeader.h" />
-    <ClInclude Include="AmsPort.h" />
-    <ClInclude Include="AmsRouter.h" />
-    <ClInclude Include="Frame.h" />
-    <ClInclude Include="Log.h" />
-    <ClInclude Include="NotificationDispatcher.h" />
-    <ClInclude Include="RingBuffer.h" />
-    <ClInclude Include="Router.h" />
-    <ClInclude Include="Sockets.h" />
-    <ClInclude Include="wrap_endian.h" />
-    <ClInclude Include="wrap_socket.h" />
+    <ClCompile Include="AdsNotification.cpp" />
+    <ClCompile Include="AdsDevice.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AdsDef.cpp" />
-    <ClCompile Include="AmsConnection.cpp" />
-    <ClCompile Include="AdsLib.cpp" />
-    <ClCompile Include="AmsPort.cpp" />
-    <ClCompile Include="AmsRouter.cpp" />
-    <ClCompile Include="Frame.cpp" />
-    <ClCompile Include="Log.cpp" />
-    <ClCompile Include="NotificationDispatcher.cpp" />
-    <ClCompile Include="Sockets.cpp" />
+    <ClInclude Include="AdsException.h" />
+    <ClInclude Include="AdsNotificationOOI.h" />
+    <ClInclude Include="AdsDevice.h" />
+    <ClInclude Include="AdsVariable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
