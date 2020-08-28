@@ -1,5 +1,4 @@
-
-OS_NAME ?=$(shell uname)
+OS_NAME ?= $(shell uname)
 VPATH = AdsLib
 LIBS = -lpthread
 LIB_NAME = AdsLib-$(OS_NAME).a
@@ -19,13 +18,11 @@ CPP_FILES := $(wildcard $(SRC_DIR)*.cpp)
 # Create list of corresponding .obj outputs
 OBJ_FILES := $(addprefix $(OBJ_DIR),$(notdir $(CPP_FILES:.cpp=.o)))
 
-ifeq ($(OS_NAME),Darwin)
-	LIBS += -lc++
-endif
 
-ifeq ($(OS_NAME),win32)
-	LIBS += -lws2_32
-endif
+LDFLAGS += -lpthread
+LDFLAGS_Darwin += -lc++
+LDFLAGS_win32 += -lws2_32
+LDFLAGS += $(LDFLAGS_$(OS_NAME))
 
 all: $(SHARED_LIB_NAME)
 
