@@ -25,6 +25,34 @@
 
 #include "AdsDef.h"
 
+// #define IMPORT_ADSLIB_SYMBOLS when including this file and linking DLL
+#if defined(_WIN32) || defined(__CYGWIN__)
+#   if defined(IMPORT_ADSLIB_SYMBOLS)
+#       if defined(__GNUC__)
+#           define EXPORTED __attribute__ ((dllimport))
+#       elif defined(_MSC_VER)
+#           define EXPORTED __declspec(dllimport)
+#       else
+#           define EXPORTED
+#       endif
+#   else
+#       if defined(__GNUC__)
+#           define EXPORTED __attribute__ ((dllexport))
+#       elif defined(_MSC_VER)
+#           define EXPORTED __declspec(dllexport)
+#       else
+#           define EXPORTED
+#       endif
+#   endif  // defined(IMPORT_ADSLIB_SYMBOLS)
+#else
+#   if defined(__GNUC__) && (__GNUC__ >= 4)
+#       define EXPORTED __attribute__ ((visibility ("default")))
+#   else
+#       define EXPORTED
+#   endif
+#endif
+
+
 extern "C" {
 
 /**
@@ -33,13 +61,13 @@ extern "C" {
  * @param[in] ip address of the target system
  * @return [ADS Return Code](http://infosys.beckhoff.de/content/1033/tc3_adsdll2/html/ads_returncodes.htm?id=17663)
  */
-long AdsAddRoute(AmsNetId ams, const char* ip);
+EXPORTED long AdsAddRoute(AmsNetId ams, const char* ip);
 
 /**
  * Delete ams route that had previously been added with AdsAddRoute().
  * @param[in] ams address of the target system
  */
-void AdsDelRoute(AmsNetId ams);
+EXPORTED void AdsDelRoute(AmsNetId ams);
 
 /**
  * The connection (communication port) to the message router is
@@ -48,7 +76,7 @@ void AdsDelRoute(AmsNetId ams);
  * @param[in] port port number of an Ads port that had previously been opened with AdsPortOpenEx().
  * @return [ADS Return Code](http://infosys.beckhoff.de/content/1033/tc3_adsdll2/html/ads_returncodes.htm?id=17663)
  */
-long AdsPortCloseEx(long port);
+EXPORTED long AdsPortCloseEx(long port);
 
 /**
  * Establishes a connection (communication port) to the message
@@ -56,7 +84,7 @@ long AdsPortCloseEx(long port);
  * parameter for further AdsLib function calls.
  * @return port number of a new Ads port or 0 if no more ports available
  */
-long AdsPortOpenEx();
+EXPORTED long AdsPortOpenEx();
 
 /**
  * Returns the local NetId and port number.
@@ -64,13 +92,13 @@ long AdsPortOpenEx();
  * @param[out] pAddr Pointer to the structure of type AmsAddr.
  * @return [ADS Return Code](http://infosys.beckhoff.de/content/1033/tc3_adsdll2/html/ads_returncodes.htm?id=17663)
  */
-long AdsGetLocalAddressEx(long port, AmsAddr* pAddr);
+EXPORTED long AdsGetLocalAddressEx(long port, AmsAddr* pAddr);
 
 /**
  * Change local NetId
  * @param[in] ams local AmsNetId
  */
-void AdsSetLocalAddress(AmsNetId ams);
+EXPORTED void AdsSetLocalAddress(AmsNetId ams);
 
 /**
  * Reads data synchronously from an ADS server.
@@ -83,13 +111,13 @@ void AdsSetLocalAddress(AmsNetId ams);
  * @param[out] bytesRead pointer to a variable. If successful, this variable will return the number of actually read data bytes.
  * @return [ADS Return Code](http://infosys.beckhoff.de/content/1033/tc3_adsdll2/html/ads_returncodes.htm?id=17663)
  */
-long AdsSyncReadReqEx2(long           port,
-                       const AmsAddr* pAddr,
-                       uint32_t       indexGroup,
-                       uint32_t       indexOffset,
-                       uint32_t       bufferLength,
-                       void*          buffer,
-                       uint32_t*      bytesRead);
+EXPORTED long AdsSyncReadReqEx2(long           port,
+                                const AmsAddr* pAddr,
+                                uint32_t       indexGroup,
+                                uint32_t       indexOffset,
+                                uint32_t       bufferLength,
+                                void*          buffer,
+                                uint32_t*      bytesRead);
 
 /**
  * Reads the identification and version number of an ADS server.
@@ -99,7 +127,7 @@ long AdsSyncReadReqEx2(long           port,
  * @param[out] version Address of a variable of type AdsVersion, which will receive the version number, revision number and the build number.
  * @return [ADS Return Code](http://infosys.beckhoff.de/content/1033/tc3_adsdll2/html/ads_returncodes.htm?id=17663)
  */
-long AdsSyncReadDeviceInfoReqEx(long port, const AmsAddr* pAddr, char* devName, AdsVersion* version);
+EXPORTED long AdsSyncReadDeviceInfoReqEx(long port, const AmsAddr* pAddr, char* devName, AdsVersion* version);
 
 /**
  * Reads the ADS status and the device status from an ADS server.
@@ -109,7 +137,7 @@ long AdsSyncReadDeviceInfoReqEx(long port, const AmsAddr* pAddr, char* devName, 
  * @param[out] devState Address of a variable that will receive the device status.
  * @return [ADS Return Code](http://infosys.beckhoff.de/content/1033/tc3_adsdll2/html/ads_returncodes.htm?id=17663)
  */
-long AdsSyncReadStateReqEx(long port, const AmsAddr* pAddr, uint16_t* adsState, uint16_t* devState);
+EXPORTED long AdsSyncReadStateReqEx(long port, const AmsAddr* pAddr, uint16_t* adsState, uint16_t* devState);
 
 /**
  * Writes data synchronously into an ADS server and receives data back from the ADS server.
@@ -124,15 +152,15 @@ long AdsSyncReadStateReqEx(long port, const AmsAddr* pAddr, uint16_t* adsState, 
  * @param[out] bytesRead pointer to a variable. If successful, this variable will return the number of actually read data bytes.
  * @return [ADS Return Code](http://infosys.beckhoff.de/content/1033/tc3_adsdll2/html/ads_returncodes.htm?id=17663)
  */
-long AdsSyncReadWriteReqEx2(long           port,
-                            const AmsAddr* pAddr,
-                            uint32_t       indexGroup,
-                            uint32_t       indexOffset,
-                            uint32_t       readLength,
-                            void*          readData,
-                            uint32_t       writeLength,
-                            const void*    writeData,
-                            uint32_t*      bytesRead);
+EXPORTED long AdsSyncReadWriteReqEx2(long           port,
+                                     const AmsAddr* pAddr,
+                                     uint32_t       indexGroup,
+                                     uint32_t       indexOffset,
+                                     uint32_t       readLength,
+                                     void*          readData,
+                                     uint32_t       writeLength,
+                                     const void*    writeData,
+                                     uint32_t*      bytesRead);
 
 /**
  * Writes data synchronously to an ADS server.
@@ -144,12 +172,12 @@ long AdsSyncReadWriteReqEx2(long           port,
  * @param[in] buffer Buffer with data send to the ADS server.
  * @return [ADS Return Code](http://infosys.beckhoff.de/content/1033/tc3_adsdll2/html/ads_returncodes.htm?id=17663)
  */
-long AdsSyncWriteReqEx(long           port,
-                       const AmsAddr* pAddr,
-                       uint32_t       indexGroup,
-                       uint32_t       indexOffset,
-                       uint32_t       bufferLength,
-                       const void*    buffer);
+EXPORTED long AdsSyncWriteReqEx(long           port,
+                                const AmsAddr* pAddr,
+                                uint32_t       indexGroup,
+                                uint32_t       indexOffset,
+                                uint32_t       bufferLength,
+                                const void*    buffer);
 
 /**
  * Changes the ADS status and the device status of an ADS server.
@@ -161,12 +189,12 @@ long AdsSyncWriteReqEx(long           port,
  * @param[in] buffer Buffer with additional data send to the ADS server.
  * @return [ADS Return Code](http://infosys.beckhoff.de/content/1033/tc3_adsdll2/html/ads_returncodes.htm?id=17663)
  */
-long AdsSyncWriteControlReqEx(long           port,
-                              const AmsAddr* pAddr,
-                              uint16_t       adsState,
-                              uint16_t       devState,
-                              uint32_t       bufferLength,
-                              const void*    buffer);
+EXPORTED long AdsSyncWriteControlReqEx(long           port,
+                                       const AmsAddr* pAddr,
+                                       uint16_t       adsState,
+                                       uint16_t       devState,
+                                       uint32_t       bufferLength,
+                                       const void*    buffer);
 
 /**
  * A notification is defined within an ADS server (e.g. PLC). When a
@@ -182,14 +210,14 @@ long AdsSyncWriteControlReqEx(long           port,
  * @param[out] pNotification Address of the variable that will receive the handle of the notification.
  * @return [ADS Return Code](http://infosys.beckhoff.de/content/1033/tc3_adsdll2/html/ads_returncodes.htm?id=17663)
  */
-long AdsSyncAddDeviceNotificationReqEx(long                         port,
-                                       const AmsAddr*               pAddr,
-                                       uint32_t                     indexGroup,
-                                       uint32_t                     indexOffset,
-                                       const AdsNotificationAttrib* pAttrib,
-                                       PAdsNotificationFuncEx       pFunc,
-                                       uint32_t                     hUser,
-                                       uint32_t*                    pNotification);
+EXPORTED long AdsSyncAddDeviceNotificationReqEx(long                         port,
+                                                const AmsAddr*               pAddr,
+                                                uint32_t                     indexGroup,
+                                                uint32_t                     indexOffset,
+                                                const AdsNotificationAttrib* pAttrib,
+                                                PAdsNotificationFuncEx       pFunc,
+                                                uint32_t                     hUser,
+                                                uint32_t*                    pNotification);
 
 /**
  * A notification defined previously is deleted from an ADS server.
@@ -198,7 +226,7 @@ long AdsSyncAddDeviceNotificationReqEx(long                         port,
  * @param[in] hNotification Address of the variable that contains the handle of the notification.
  * @return [ADS Return Code](http://infosys.beckhoff.de/content/1033/tc3_adsdll2/html/ads_returncodes.htm?id=17663)
  */
-long AdsSyncDelDeviceNotificationReqEx(long port, const AmsAddr* pAddr, uint32_t hNotification);
+EXPORTED long AdsSyncDelDeviceNotificationReqEx(long port, const AmsAddr* pAddr, uint32_t hNotification);
 
 /**
  * Read the configured timeout for the ADS functions. The standard value is 5000 ms.
@@ -206,7 +234,7 @@ long AdsSyncDelDeviceNotificationReqEx(long port, const AmsAddr* pAddr, uint32_t
  * @param[out] timeout Buffer to store timeout value in ms.
  * @return [ADS Return Code](http://infosys.beckhoff.de/content/1033/tc3_adsdll2/html/ads_returncodes.htm?id=17663)
  */
-long AdsSyncGetTimeoutEx(long port, uint32_t* timeout);
+EXPORTED long AdsSyncGetTimeoutEx(long port, uint32_t* timeout);
 
 /**
  * Alters the timeout for the ADS functions. The standard value is 5000 ms.
@@ -214,8 +242,8 @@ long AdsSyncGetTimeoutEx(long port, uint32_t* timeout);
  * @param[in] timeout Timeout in ms.
  * @return [ADS Return Code](http://infosys.beckhoff.de/content/1033/tc3_adsdll2/html/ads_returncodes.htm?id=17663)
  */
-long AdsSyncSetTimeoutEx(long port, uint32_t timeout);
+EXPORTED long AdsSyncSetTimeoutEx(long port, uint32_t timeout);
 
-}
+}  // extern "C"
 
 #endif /* #ifndef _ADSLIB_H_ */
