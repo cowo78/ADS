@@ -17,3 +17,6 @@ artifacts:
   - path: AdsLib\Release\AdsLib.dll
     name: AdsLib Release DLL
     type: File
+  - path: AdsLib\Debug\AdsLibd.dll
+    name: AdsLib Debug DLL
+    type: File
