@@ -1,0 +1,13 @@
+os: Visual Studio 2019
+clone_depth: 1
+
+branches:
+  only:
+    - win32_standalone
+
+configuration:
+  - Release
+  - Debug
+
+build_script:
+  - MsBuild AdsLib\AdsLib.vcxproj -p:Platform=Win32 -p:Configuration=Release -interactive:False -verbosity:normal -logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
