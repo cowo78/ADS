@@ -10,7 +10,7 @@ configuration:
   - Debug
 
 build:
-  project: AdsLib.sln
+  project: AdsLib\AdsLib.vcxproj
   verbosity: normal
 
 artifacts:
